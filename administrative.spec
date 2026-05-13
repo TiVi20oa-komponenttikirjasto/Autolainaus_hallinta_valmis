@@ -5,7 +5,7 @@ a = Analysis(
     ['administrative.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[('uiPictures\*.png', 'uipictures')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

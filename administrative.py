@@ -42,6 +42,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # Kutsutaan käyttöliittymän muodostusmetodia setupUi
         self.ui.setupUi(self)
+        # Populate department choices (keeps behavior stable if UI generation differs)
+        try:
+            self.ui.departmentComboBox.addItems(['Ajoneuvoala', 'sähkö- ja automaatioala'])
+        except Exception:
+            pass
 
         # Rutiini, joka lukee asetukset, jos ne ovat olemassa
         try:
@@ -425,6 +430,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ui.modelYearLineEdit.clear()
         self.ui.capacityLineEdit.clear()
         self.ui.agbCheckBox.setChecked(False)
+        self.ui.departmentComboBox.clearEditText()
         self.ui.vehicleOwnerLineEdit.clear()
 
     # Ajopäiväkirjarajausten tyhjennys

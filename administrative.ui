@@ -20,7 +20,7 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>20</x>
       <y>0</y>
       <width>971</width>
       <height>551</height>
@@ -10408,13 +10408,6 @@ color: rgb(255, 255, 255);</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QLabel" name="vehicleOwnerLabel">
-         <property name="text">
-          <string>Vastuuhenkilö</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="layoutWidget_2">
@@ -10521,16 +10514,6 @@ color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
           <string>Automaattivaihteet</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="vehicleOwnerLineEdit">
-         <property name="placeholderText">
-          <string>Valinnainen tieto</string>
-         </property>
-         <property name="clearButtonEnabled">
-          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -10740,7 +10723,7 @@ color: rgb(255, 255, 255);</string>
       <property name="geometry">
        <rect>
         <x>670</x>
-        <y>20</y>
+        <y>40</y>
         <width>281</width>
         <height>211</height>
        </rect>
@@ -10832,6 +10815,45 @@ color: rgb(255, 255, 255);</string>
       <property name="text">
        <string>Päivitä kuva</string>
       </property>
+     </widget>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>310</x>
+        <y>0</y>
+        <width>421</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="departmentLabel">
+         <property name="text">
+          <string>Osasto</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="departmentComboBox"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="vehicleOwnerLabel">
+         <property name="text">
+          <string>Vastuuhenkilö</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="vehicleOwnerLineEdit">
+         <property name="placeholderText">
+          <string>Valinnainen tieto</string>
+         </property>
+         <property name="clearButtonEnabled">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
     <widget class="QWidget" name="reportsTab">

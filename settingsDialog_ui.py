@@ -15,8 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QDialog, QLabel, QLineEdit,
-    QPushButton, QSizePolicy, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QDialog, QFormLayout, QLabel,
+    QLineEdit, QPushButton, QSizePolicy, QVBoxLayout,
+    QWidget)
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
@@ -27,7 +28,7 @@ class Ui_Dialog(object):
         Dialog.setWindowIcon(icon)
         self.saveSettingspushButton = QPushButton(Dialog)
         self.saveSettingspushButton.setObjectName(u"saveSettingspushButton")
-        self.saveSettingspushButton.setGeometry(QRect(210, 180, 81, 23))
+        self.saveSettingspushButton.setGeometry(QRect(210, 200, 81, 23))
         font = QFont()
         font.setPointSize(8)
         font.setBold(True)
@@ -35,86 +36,103 @@ class Ui_Dialog(object):
         self.saveSettingspushButton.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.saveSettingspushButton.setStyleSheet(u"background-color: rgb(57, 136, 220);\n"
 "color: rgb(255, 255, 255);")
-        self.layoutWidget = QWidget(Dialog)
-        self.layoutWidget.setObjectName(u"layoutWidget")
-        self.layoutWidget.setGeometry(QRect(110, 10, 181, 156))
-        self.verticalLayout = QVBoxLayout(self.layoutWidget)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.serverLineEdit = QLineEdit(self.layoutWidget)
-        self.serverLineEdit.setObjectName(u"serverLineEdit")
+        self.closePushButton = QPushButton(Dialog)
+        self.closePushButton.setObjectName(u"closePushButton")
+        self.closePushButton.setGeometry(QRect(120, 200, 75, 24))
+        self.widget = QWidget(Dialog)
+        self.widget.setObjectName(u"widget")
+        self.widget.setGeometry(QRect(20, 0, 246, 190))
+        self.formLayout = QFormLayout(self.widget)
+        self.formLayout.setObjectName(u"formLayout")
+        self.formLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_2 = QVBoxLayout()
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.ServerLabel = QLabel(self.widget)
+        self.ServerLabel.setObjectName(u"ServerLabel")
         font1 = QFont()
-        font1.setPointSize(11)
-        self.serverLineEdit.setFont(font1)
+        font1.setPointSize(10)
+        self.ServerLabel.setFont(font1)
+
+        self.verticalLayout_2.addWidget(self.ServerLabel)
+
+        self.portLabel = QLabel(self.widget)
+        self.portLabel.setObjectName(u"portLabel")
+        self.portLabel.setFont(font1)
+
+        self.verticalLayout_2.addWidget(self.portLabel)
+
+        self.databaseLabel = QLabel(self.widget)
+        self.databaseLabel.setObjectName(u"databaseLabel")
+        self.databaseLabel.setFont(font1)
+
+        self.verticalLayout_2.addWidget(self.databaseLabel)
+
+        self.userLabel = QLabel(self.widget)
+        self.userLabel.setObjectName(u"userLabel")
+        self.userLabel.setFont(font1)
+
+        self.verticalLayout_2.addWidget(self.userLabel)
+
+        self.passwordLabel = QLabel(self.widget)
+        self.passwordLabel.setObjectName(u"passwordLabel")
+        self.passwordLabel.setFont(font1)
+
+        self.verticalLayout_2.addWidget(self.passwordLabel)
+
+        self.departmentLabel = QLabel(self.widget)
+        self.departmentLabel.setObjectName(u"departmentLabel")
+        self.departmentLabel.setFont(font1)
+
+        self.verticalLayout_2.addWidget(self.departmentLabel)
+
+
+        self.formLayout.setLayout(0, QFormLayout.LabelRole, self.verticalLayout_2)
+
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.serverLineEdit = QLineEdit(self.widget)
+        self.serverLineEdit.setObjectName(u"serverLineEdit")
+        font2 = QFont()
+        font2.setPointSize(11)
+        self.serverLineEdit.setFont(font2)
 
         self.verticalLayout.addWidget(self.serverLineEdit)
 
-        self.portLineEdit = QLineEdit(self.layoutWidget)
+        self.portLineEdit = QLineEdit(self.widget)
         self.portLineEdit.setObjectName(u"portLineEdit")
-        self.portLineEdit.setFont(font1)
+        self.portLineEdit.setFont(font2)
 
         self.verticalLayout.addWidget(self.portLineEdit)
 
-        self.databaseLineEdit = QLineEdit(self.layoutWidget)
+        self.databaseLineEdit = QLineEdit(self.widget)
         self.databaseLineEdit.setObjectName(u"databaseLineEdit")
-        self.databaseLineEdit.setFont(font1)
+        self.databaseLineEdit.setFont(font2)
 
         self.verticalLayout.addWidget(self.databaseLineEdit)
 
-        self.userLineEdit = QLineEdit(self.layoutWidget)
+        self.userLineEdit = QLineEdit(self.widget)
         self.userLineEdit.setObjectName(u"userLineEdit")
-        self.userLineEdit.setFont(font1)
+        self.userLineEdit.setFont(font2)
 
         self.verticalLayout.addWidget(self.userLineEdit)
 
-        self.paswordLineEdit = QLineEdit(self.layoutWidget)
+        self.paswordLineEdit = QLineEdit(self.widget)
         self.paswordLineEdit.setObjectName(u"paswordLineEdit")
-        self.paswordLineEdit.setFont(font1)
+        self.paswordLineEdit.setFont(font2)
         self.paswordLineEdit.setEchoMode(QLineEdit.EchoMode.PasswordEchoOnEdit)
 
         self.verticalLayout.addWidget(self.paswordLineEdit)
 
-        self.layoutWidget_2 = QWidget(Dialog)
-        self.layoutWidget_2.setObjectName(u"layoutWidget_2")
-        self.layoutWidget_2.setGeometry(QRect(10, 10, 86, 141))
-        self.verticalLayout_2 = QVBoxLayout(self.layoutWidget_2)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.ServerLabel = QLabel(self.layoutWidget_2)
-        self.ServerLabel.setObjectName(u"ServerLabel")
-        font2 = QFont()
-        font2.setPointSize(10)
-        self.ServerLabel.setFont(font2)
+        self.departmentLineEdit = QLineEdit(self.widget)
+        self.departmentLineEdit.setObjectName(u"departmentLineEdit")
+        self.departmentLineEdit.setFont(font2)
+        self.departmentLineEdit.setEchoMode(QLineEdit.EchoMode.PasswordEchoOnEdit)
 
-        self.verticalLayout_2.addWidget(self.ServerLabel)
+        self.verticalLayout.addWidget(self.departmentLineEdit)
 
-        self.portLabel = QLabel(self.layoutWidget_2)
-        self.portLabel.setObjectName(u"portLabel")
-        self.portLabel.setFont(font2)
 
-        self.verticalLayout_2.addWidget(self.portLabel)
+        self.formLayout.setLayout(0, QFormLayout.FieldRole, self.verticalLayout)
 
-        self.databaseLabel = QLabel(self.layoutWidget_2)
-        self.databaseLabel.setObjectName(u"databaseLabel")
-        self.databaseLabel.setFont(font2)
-
-        self.verticalLayout_2.addWidget(self.databaseLabel)
-
-        self.userLabel = QLabel(self.layoutWidget_2)
-        self.userLabel.setObjectName(u"userLabel")
-        self.userLabel.setFont(font2)
-
-        self.verticalLayout_2.addWidget(self.userLabel)
-
-        self.passwordLabel = QLabel(self.layoutWidget_2)
-        self.passwordLabel.setObjectName(u"passwordLabel")
-        self.passwordLabel.setFont(font2)
-
-        self.verticalLayout_2.addWidget(self.passwordLabel)
-
-        self.closePushButton = QPushButton(Dialog)
-        self.closePushButton.setObjectName(u"closePushButton")
-        self.closePushButton.setGeometry(QRect(110, 180, 75, 24))
 
         self.retranslateUi(Dialog)
 
@@ -127,6 +145,13 @@ class Ui_Dialog(object):
         self.saveSettingspushButton.setToolTip(QCoreApplication.translate("Dialog", u"<html><head/><body><p><span style=\" font-size:10pt;\">Tallentaa asetukset tiedostoon</span></p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
         self.saveSettingspushButton.setText(QCoreApplication.translate("Dialog", u"Tallenna", None))
+        self.closePushButton.setText(QCoreApplication.translate("Dialog", u"Sulje", None))
+        self.ServerLabel.setText(QCoreApplication.translate("Dialog", u"Palvelin", None))
+        self.portLabel.setText(QCoreApplication.translate("Dialog", u"Portti", None))
+        self.databaseLabel.setText(QCoreApplication.translate("Dialog", u"Tietokanta", None))
+        self.userLabel.setText(QCoreApplication.translate("Dialog", u"K\u00e4ytt\u00e4j\u00e4tunnus", None))
+        self.passwordLabel.setText(QCoreApplication.translate("Dialog", u"Salasana", None))
+        self.departmentLabel.setText(QCoreApplication.translate("Dialog", u"Osasto", None))
 #if QT_CONFIG(tooltip)
         self.serverLineEdit.setToolTip(QCoreApplication.translate("Dialog", u"<html><head/><body><p><span style=\" font-size:10pt;\">Palvelimen nimi tai IP-osoite</span></p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
@@ -142,11 +167,8 @@ class Ui_Dialog(object):
 #if QT_CONFIG(tooltip)
         self.paswordLineEdit.setToolTip(QCoreApplication.translate("Dialog", u"<html><head/><body><p><span style=\" font-size:10pt;\">Salasana</span></p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
-        self.ServerLabel.setText(QCoreApplication.translate("Dialog", u"Palvelin", None))
-        self.portLabel.setText(QCoreApplication.translate("Dialog", u"Portti", None))
-        self.databaseLabel.setText(QCoreApplication.translate("Dialog", u"Tietokanta", None))
-        self.userLabel.setText(QCoreApplication.translate("Dialog", u"K\u00e4ytt\u00e4j\u00e4tunnus", None))
-        self.passwordLabel.setText(QCoreApplication.translate("Dialog", u"Salasana", None))
-        self.closePushButton.setText(QCoreApplication.translate("Dialog", u"Sulje", None))
+#if QT_CONFIG(tooltip)
+        self.departmentLineEdit.setToolTip(QCoreApplication.translate("Dialog", u"<html><head/><body><p><span style=\" font-size:10pt;\">Salasana</span></p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
     # retranslateUi
 

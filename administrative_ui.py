@@ -17,10 +17,10 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDateEdit,
-    QFrame, QHeaderView, QLabel, QLineEdit,
-    QMainWindow, QMenu, QMenuBar, QPushButton,
-    QSizePolicy, QStatusBar, QTabWidget, QTableWidget,
-    QTableWidgetItem, QVBoxLayout, QWidget)
+    QFrame, QHBoxLayout, QHeaderView, QLabel,
+    QLineEdit, QMainWindow, QMenu, QMenuBar,
+    QPushButton, QSizePolicy, QStatusBar, QTabWidget,
+    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -39,7 +39,7 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName(u"centralwidget")
         self.tabWidget = QTabWidget(self.centralwidget)
         self.tabWidget.setObjectName(u"tabWidget")
-        self.tabWidget.setGeometry(QRect(0, 0, 971, 551))
+        self.tabWidget.setGeometry(QRect(20, 0, 971, 551))
         font = QFont()
         font.setPointSize(10)
         self.tabWidget.setFont(font)
@@ -217,11 +217,6 @@ class Ui_MainWindow(object):
 
         self.vehicleLabelsVerticalLayout.addWidget(self.agbLabel)
 
-        self.vehicleOwnerLabel = QLabel(self.layoutWidget2)
-        self.vehicleOwnerLabel.setObjectName(u"vehicleOwnerLabel")
-
-        self.vehicleLabelsVerticalLayout.addWidget(self.vehicleOwnerLabel)
-
         self.layoutWidget_2 = QWidget(self.vehicleTab)
         self.layoutWidget_2.setObjectName(u"layoutWidget_2")
         self.layoutWidget_2.setGeometry(QRect(120, 0, 169, 245))
@@ -274,12 +269,6 @@ class Ui_MainWindow(object):
 
         self.vehicleInputsVerticalLayout.addWidget(self.agbCheckBox)
 
-        self.vehicleOwnerLineEdit = QLineEdit(self.layoutWidget_2)
-        self.vehicleOwnerLineEdit.setObjectName(u"vehicleOwnerLineEdit")
-        self.vehicleOwnerLineEdit.setClearButtonEnabled(True)
-
-        self.vehicleInputsVerticalLayout.addWidget(self.vehicleOwnerLineEdit)
-
         self.saveVehiclePushButton = QPushButton(self.vehicleTab)
         self.saveVehiclePushButton.setObjectName(u"saveVehiclePushButton")
         self.saveVehiclePushButton.setGeometry(QRect(300, 220, 101, 25))
@@ -311,7 +300,7 @@ class Ui_MainWindow(object):
         self.openPicturePushButton.setIconSize(QSize(24, 24))
         self.vehiclePictureLabel = QLabel(self.vehicleTab)
         self.vehiclePictureLabel.setObjectName(u"vehiclePictureLabel")
-        self.vehiclePictureLabel.setGeometry(QRect(670, 20, 281, 211))
+        self.vehiclePictureLabel.setGeometry(QRect(670, 40, 281, 211))
         self.vehiclePictureLabel.setFrameShape(QFrame.Shape.NoFrame)
         self.vehiclePictureLabel.setPixmap(QPixmap(u"uiPictures/noPicture.png"))
         self.vehiclePictureLabel.setScaledContents(True)
@@ -335,6 +324,33 @@ class Ui_MainWindow(object):
         self.updatePicturePushButton.setFont(font1)
         self.updatePicturePushButton.setStyleSheet(u"background-color: rgb(57, 136, 220);\n"
 "color: rgb(255, 255, 255);")
+        self.widget = QWidget(self.vehicleTab)
+        self.widget.setObjectName(u"widget")
+        self.widget.setGeometry(QRect(310, 0, 421, 28))
+        self.horizontalLayout = QHBoxLayout(self.widget)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
+        self.departmentLabel = QLabel(self.widget)
+        self.departmentLabel.setObjectName(u"departmentLabel")
+
+        self.horizontalLayout.addWidget(self.departmentLabel)
+
+        self.departmentComboBox = QComboBox(self.widget)
+        self.departmentComboBox.setObjectName(u"departmentComboBox")
+
+        self.horizontalLayout.addWidget(self.departmentComboBox)
+
+        self.vehicleOwnerLabel = QLabel(self.widget)
+        self.vehicleOwnerLabel.setObjectName(u"vehicleOwnerLabel")
+
+        self.horizontalLayout.addWidget(self.vehicleOwnerLabel)
+
+        self.vehicleOwnerLineEdit = QLineEdit(self.widget)
+        self.vehicleOwnerLineEdit.setObjectName(u"vehicleOwnerLineEdit")
+        self.vehicleOwnerLineEdit.setClearButtonEnabled(True)
+
+        self.horizontalLayout.addWidget(self.vehicleOwnerLineEdit)
+
         self.tabWidget.addTab(self.vehicleTab, "")
         self.reportsTab = QWidget()
         self.reportsTab.setObjectName(u"reportsTab")
@@ -557,7 +573,6 @@ class Ui_MainWindow(object):
         self.capacityLabel.setText(QCoreApplication.translate("MainWindow", u"Henkil\u00f6m\u00e4\u00e4r\u00e4", None))
         self.vehicleTypeLabel.setText(QCoreApplication.translate("MainWindow", u"Ajoneuvotyyppi", None))
         self.agbLabel.setText(QCoreApplication.translate("MainWindow", u"Automaatti", None))
-        self.vehicleOwnerLabel.setText(QCoreApplication.translate("MainWindow", u"Vastuuhenkil\u00f6", None))
         self.numberPlateLineEdit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Pakollinen tieto", None))
         self.manufacturerLineEdit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Pakollinen tieto", None))
         self.modelLineEdit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Pakollinen tieto", None))
@@ -568,7 +583,6 @@ class Ui_MainWindow(object):
         self.agbCheckBox.setToolTip(QCoreApplication.translate("MainWindow", u"Autossa automaattivaihteet, pakollinen tieto", None))
 #endif // QT_CONFIG(tooltip)
         self.agbCheckBox.setText(QCoreApplication.translate("MainWindow", u"Automaattivaihteet", None))
-        self.vehicleOwnerLineEdit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Valinnainen tieto", None))
         self.saveVehiclePushButton.setText(QCoreApplication.translate("MainWindow", u"Tallenna", None))
 #if QT_CONFIG(tooltip)
         self.vehicleCatalogTableWidget.setToolTip(QCoreApplication.translate("MainWindow", u"<html><head/><body><p>Valitse auto klikkaamalla solua. T\u00e4m\u00e4n j\u00e4lkeen auton voi poistaa tai est\u00e4\u00e4 sen lainaamisen.</p></body></html>", None))
@@ -581,6 +595,9 @@ class Ui_MainWindow(object):
         self.removeVehiclePushButton.setText(QCoreApplication.translate("MainWindow", u"Poista", None))
         self.notLendablePushButton.setText(QCoreApplication.translate("MainWindow", u"Ei lainattavissa", None))
         self.updatePicturePushButton.setText(QCoreApplication.translate("MainWindow", u"P\u00e4ivit\u00e4 kuva", None))
+        self.departmentLabel.setText(QCoreApplication.translate("MainWindow", u"Osasto", None))
+        self.vehicleOwnerLabel.setText(QCoreApplication.translate("MainWindow", u"Vastuuhenkil\u00f6", None))
+        self.vehicleOwnerLineEdit.setPlaceholderText(QCoreApplication.translate("MainWindow", u"Valinnainen tieto", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.vehicleTab), QCoreApplication.translate("MainWindow", u"Autot", None))
         self.reportTypecomboBox.setCurrentText("")
         self.reportTypeLabel.setText(QCoreApplication.translate("MainWindow", u"Raportti", None))
