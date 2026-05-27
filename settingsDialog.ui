@@ -58,7 +58,7 @@ color: rgb(255, 255, 255);</string>
     <string>Sulje</string>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -217,10 +217,10 @@ color: rgb(255, 255, 255);</string>
          </font>
         </property>
         <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Salasana&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Osasto&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
         <property name="echoMode">
-         <enum>QLineEdit::EchoMode::PasswordEchoOnEdit</enum>
+         <enum>QLineEdit::EchoMode::Normal</enum>
         </property>
        </widget>
       </item>

@@ -42,11 +42,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # Kutsutaan käyttöliittymän muodostusmetodia setupUi
         self.ui.setupUi(self)
-        # Populate department choices (keeps behavior stable if UI generation differs)
-        try:
-            self.ui.departmentComboBox.addItems(['Ajoneuvoala', 'sähkö- ja automaatioala'])
-        except Exception:
-            pass
+        
+        # Department column detected at runtime (populated in updateChoices)
+        self.department_column_name = None
 
         # Rutiini, joka lukee asetukset, jos ne ovat olemassa
         try:
@@ -111,6 +109,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ui.reasonDeltePushButton.clicked.connect(self.deleteReason)
         self.ui.vehicleTypeDeletePushButton.clicked.connect(self.deleteVehicleType)
         self.ui.updatePicturePushButton.clicked.connect(self.updatePicture)
+        self.ui.departmentAddPushButton.clicked.connect(self.newDepartment)
 
         # Taulukoiden solujen klikkaaminen
         self.ui.vehicleCatalogTableWidget.cellClicked.connect(self.setRegisterNumber)
@@ -154,6 +153,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.saveSettingsDialog = SaveSettingsDialog() # Luodaan luokasta olio
         self.saveSettingsDialog.setWindowTitle('Palvelinasetukset')
         self.saveSettingsDialog.exec() # Luodaan dialogille oma event loop
+
+        # After settings dialog closes, reload settings and refresh UI so department selection updates
+        try:
+            with open('settings.json', 'rt') as settingsFile:
+                jsonData = settingsFile.read()
+                self.currentSettings = json.loads(jsonData)
+            self.plainTextPassword = cipher.decryptString(self.currentSettings['password'])
+            self.refreshUi()
+        except Exception:
+            pass
         
     # Tietoja ohjelmasta -sivun avaus (repositorion readme.md)
     def openAboutDialog(self):
@@ -221,6 +230,16 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ui.vehicleTypeComboBox.clear()
         self.ui.vehicleTypeComboBox.addItems(typeStringList)
 
+        # Tehdään lista osastoista
+        departmentList = dbConnection.readColumsFromTable('osasto', ['osasto'])
+        departmentStringList = []
+        for division in departmentList:
+            departmentString = str(item[0])
+            departmentStringList.append(departmentString) 
+
+        self.ui.vehicleTypeComboBox.clear()
+        self.ui.vehicleTypeComboBox.addItems(typeStringList)
+
         # Lista ajopäiväkirjoista -> raporttinäkymien nimet
         self.ui.reportTypecomboBox.clear()
         self.ui.reportTypecomboBox.addItems(['ajopaivakirja', 'autoittain'])
@@ -228,6 +247,46 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # Raporttivälin päivämäärävalitsinten oletuspäivien asetus
         self.ui.beginingDateEdit.setDate(self.firstDayOfYear)
         self.ui.endingDateEdit.setDate(self.today)
+
+        # Load department values from database if a suitable column exists in `auto` table.
+        # Try common column names and populate departmentComboBox with unique values.
+        possible_cols = ['osasto', 'department', 'dept']
+        self.department_column_name = None
+        dept_values = []
+        for col in possible_cols:
+            try:
+                rows = dbConnection.readColumsFromTable('auto', [col])
+                # extract unique, non-empty values
+                vals = sorted({str(r[0]).strip() for r in rows if r and r[0] is not None and str(r[0]).strip() != ''})
+                if vals:
+                    dept_values = vals
+                    self.department_column_name = col
+                    break
+            except Exception:
+                continue
+
+        if dept_values:
+            try:
+                self.ui.departmentComboBox.clear()
+                self.ui.departmentComboBox.addItems(dept_values)
+                # If settings contain saved department, select it
+                saved_dept = self.currentSettings.get('department', '') if hasattr(self, 'currentSettings') else ''
+                if saved_dept:
+                    idx = self.ui.departmentComboBox.findText(saved_dept)
+                    if idx != -1:
+                        self.ui.departmentComboBox.setCurrentIndex(idx)
+            except Exception:
+                pass
+        else:
+            # Fallback: if a department is set in settings, show it in the combobox
+            try:
+                saved_dept = self.currentSettings.get('department', '') if hasattr(self, 'currentSettings') else ''
+                if saved_dept:
+                    self.ui.departmentComboBox.clear()
+                    self.ui.departmentComboBox.addItem(saved_dept)
+                    self.ui.departmentComboBox.setCurrentIndex(0)
+            except Exception:
+                pass
 
 
     # Lainaajat-taulukon päivitys
@@ -270,15 +329,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # Luodaan tietokantayhteys-olio
         dbConnection = dbOperations.DbConnection(dbSettings)
 
-        # Tehdään lista lainaaja-taulun tiedoista
-        tableData = dbConnection.readAllColumnsFromTable('auto')
-        
-
+        columnList = ['rekisterinumero', 'deviceid', 'merkki', 'malli', 'vuosimalli', 'tyyppi', 'henkilomaara', 'automaatti', 'osasto', 'vastuuhenkilo', 'kaytettavissa']
+        tableData = dbConnection.readColumsFromTable('auto', columnList)
+ 
         # Tyhjennetään vanhat tiedot käyttöliittymästä ennen uusien lukemista tietokannasta
         self.ui.vehicleCatalogTableWidget.clearContents()
 
         # Määritellään taulukkoelementin otsikot
-        headerRow = ['Rekisteri','Käytettävissä', 'Merkki', 'Malli', 'Vuosimalli', 'Henkilömäärä', 'Tyyppi', 'Automaatti', 'Vastuuhenkilö']
+        headerRow = ['Rekisteri','PaikanninID', 'Merkki', 'Malli', 'Vuosimalli', 'Tyyppi', 'Henkilömäärä', 'Automaatti', 'Osasto', 'Vastuuhenkilö', 'Käytettävissä']
         self.ui.vehicleCatalogTableWidget.setHorizontalHeaderLabels(headerRow)
 
         # Asetetaan taulukon solujen arvot
@@ -288,7 +346,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 # Muutetaan merkkijonoksi ja QTableWidgetItem-olioksi
                 data = QtWidgets.QTableWidgetItem(str(tableData[row][column])) 
                 self.ui.vehicleCatalogTableWidget.setItem(row, column, data)
-
 
     # Päivitetään ajopäiväkirjan taulukko
     def updateDiaryTableWidget(self):
@@ -555,6 +612,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         vehicleType = self.ui.vehicleTypeComboBox.currentText()
         automaticGearBox = self.ui.agbCheckBox.isChecked()
         responsiblePerson = self.ui.vehicleOwnerLineEdit.text()
+        deviceID = self.ui.deviceIDLineEdit.text()
+        department = self.ui.departmentComboBox.text()
+
 
         # Määritellään tallennusmetodin vaatimat parametrit
         tableName = 'auto'
@@ -565,7 +625,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                           'henkilomaara': capacity,
                           'tyyppi': vehicleType,
                           'automaatti': automaticGearBox,
-                          'vastuuhenkilo': responsiblePerson
+                          'vastuuhenkilo': responsiblePerson,
+                          'paikanninID': deviceID,
+                          'osasto': department
                           }
         
         # Luodaan tietokantayhteys-olio
@@ -710,6 +772,31 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # Määritellään tallennusmetodin vaatimat parametrit
         tableName = 'ajoneuvotyyppi'
         typeDictionary = {'tyyppi': vehicleType}
+        
+        # Luodaan tietokantayhteys-olio
+        dbConnection = dbOperations.DbConnection(dbSettings)
+
+        # Kutsutaan tallennusmetodia
+        try:
+            dbConnection.addToTable(tableName, typeDictionary)
+            self.refreshUi() # Päivitetään taulukko lisäyksen jälkeen
+                   
+            
+        except Exception as e:
+            self.openWarning('Tallennus ei onnistunut', str(e))
+
+    def newDepartment(self):
+        # Määritellään tietokanta-asetukset
+        dbSettings = self.currentSettings
+        plainTextPassword = self.plainTextPassword
+        dbSettings['password'] = plainTextPassword
+
+        # Luetaan syöttöelementtien arvot paikallisiin muuttujiin
+        department = self.ui.departmentAddLineEdit.text()
+
+        # Määritellään tallennusmetodin vaatimat parametrit
+        tableName = 'osasto'
+        typeDictionary = {'tyyppi': department}
         
         # Luodaan tietokantayhteys-olio
         dbConnection = dbOperations.DbConnection(dbSettings)
@@ -900,6 +987,7 @@ class SaveSettingsDialog(QtWidgets.QDialog, Settings_Dialog):
             self.ui.userLineEdit.setText(self.currentSettings['userName'])
             plaintextPassword = cipher.decryptString(self.currentSettings['password'])
             self.ui.paswordLineEdit.setText(plaintextPassword)
+            self.ui.departmentLineEdit.setText(self.currentSettings.get('department', ''))
         except Exception as e:
             self.openInfo()
         
@@ -937,7 +1025,8 @@ class SaveSettingsDialog(QtWidgets.QDialog, Settings_Dialog):
             'port': port,
             'database': database,
             'userName': userName,
-            'password': encryptedPassword
+            'password': encryptedPassword,
+            'department': self.ui.departmentLineEdit.text()
         }
 
         # Muunnetaan sanakirja JSON-muotoon

@@ -375,13 +375,33 @@ class DbConnection():
             if currentConnection:
                 cursor.close() # Tuhotaan kursori
                 currentConnection.close() # Tuhotaan yhteys
+
+    def getVehiclesByDepartment(self, osasto):
+        # Luodaan yhteys tietokantaan
+        currentConnection = psycopg2.connect(self.connectionString)
+
+        # Luodaan kursori suorittamaan tietokantoperaatiota
+        cursor = currentConnection.cursor()
+
+        # Määritellään lopullinen SQL-lause
+        sqlClause = f"SELECT rekisterinumero, deviceid, merkki, malli, vuosimalli, tyyppi, henkilomaara, automaatti, osasto, vastuuhenkilo, kaytettavissa FROM public.auto WHERE osasto = '{osasto}';"
+        
+        # Suoritetaan SQL-lause ja luetaan tulokset kursorista
+        cursor.execute(sqlClause)
+        records= cursor.fetchall()
+        return records
         
 if __name__ == "__main__":
 
     settingsDictionary = {'server': 'localhost',
-                      'port': '5433',
-                      'database': 'testaus',
+                      'port': '5432',
+                      'database': 'autolainaus',
                       'userName': 'postgres',
-                      'password': 'Q2werty'}
+                      'password': 'Q2werty7'}
     dbconnection = DbConnection(settingsDictionary)
+
+    columsList = ['rekisterinumero', 'deviceid', 'merkki', 'malli', 'vuosimalli', 'tyyppi', 'henkilomaara', 'automaatti', 'osasto', 'vastuuhenkilo', 'kaytettavissa'] 
+
+    data = dbconnection.readColumsFromTable('auto', columsList)
+    print(data)
     
